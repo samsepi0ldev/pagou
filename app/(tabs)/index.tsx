@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, ScrollView, TouchableNativeFeedback } from 'react-native'
 import { CircleMinus, CirclePlus, Cog } from 'lucide-react-native'
 import colors from 'tailwindcss/colors'
+import { router } from 'expo-router'
 
 import { Header } from '@/components/header'
 import { Card, CardContent, CardTitle } from '@/components/card'
@@ -16,10 +17,10 @@ export default function HomeScreen () {
           </TouchableOpacity>
         </Header>
         <View className='items-center pb-4'>
-          <Text className='text-base text-violet-100'>Valor pendente</Text>
+          <Text className='text-base font-nunito-regular text-violet-100'>Valor pendente</Text>
           <View className='flex-row items-baseline mt-1'>
-            <Text className='font-medium text-violet-100 mr-1'>R$</Text>
-            <Text className='text-4xl font-medium text-violet-100'>780,00</Text>
+            <Text className='font-nunito-medium text-violet-100 mr-1'>R$</Text>
+            <Text className='text-4xl font-nunito-medium text-violet-100'>780,00</Text>
           </View>
         </View>
       </View>
@@ -46,34 +47,21 @@ export default function HomeScreen () {
 
         <Card>
           <CardTitle>Vendas pendentes recentes</CardTitle>
-          <SalesPaymentInfo
-            payment={{
-              id: 1,
-              description: 'C&A',
-              price: 8000,
-              totalPayment: 0
-            }}
-            paid={false}
-          />
-          <SalesPaymentInfo
-            payment={{
-              id: 2,
-              description: 'FEC C&A',
-              price: 11000,
-              totalPayment: 0
-            }}
-            paid={false}
-          />
-          <SalesPaymentInfo
-            payment={{
-              id: 3,
-              description: 'Instalacao PDV FEI',
-              price: 10000,
-              totalPayment: 0
-            }}
-            paid={false}
-          />
-          <TouchableNativeFeedback>
+          {Array.from({ length: 3 }).map((_, i) => (
+            <SalesPaymentInfo
+              href='/sale-inf<FloaTActionButton />o'
+              key={i.toString()}
+              payment={{
+                id: 1,
+                description: 'C&A',
+                price: 8000,
+                totalPayment: 0
+              }}
+              paid={false}
+            />
+          ))}
+   
+          <TouchableNativeFeedback onPress={() => router.push('/sales')}>
             <View className='items-center justify-center py-4 mt-4 border-t border-t-zinc-700/50'>
               <Text className='text-zinc-100 font-medium'>Ver vendas</Text>
             </View>
@@ -82,30 +70,17 @@ export default function HomeScreen () {
 
         <Card>
           <CardTitle>Pagamentos recentes</CardTitle>
-          <SalesPaymentInfo
-            payment={{
-              id: 1,
-              description: '15/02/2025',
-              price: 2000
-            }}
-            paid={true}
-          />
-          <SalesPaymentInfo
-            payment={{
-              id: 2,
-              description: '14/02/2025',
-              price: 3500
-            }}
-            paid={true}
-          />
-          <SalesPaymentInfo
-            payment={{
-              id: 3,
-              description: '12/02/2025',
-              price: 1500
-            }}
-            paid={true}
-          />
+          {Array.from({ length: 3 }).map((_, i) => (
+            <SalesPaymentInfo
+              href='/sale-payment-info' key={i.toString()}
+              payment={{
+                id: 1,
+                description: '15/02/2025',
+                price: 2000
+              }}
+              paid={true}
+            />
+          ))}
           <TouchableNativeFeedback>
             <View className='items-center justify-center py-4 mt-4 border-t border-t-zinc-700/50'>
               <Text className='text-zinc-100 font-medium'>Ver pagamentos</Text>

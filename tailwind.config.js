@@ -1,4 +1,7 @@
 /** @type {import('tailwindcss').Config} */
+
+import { platformSelect } from 'nativewind/theme'
+
 module.exports = {
   content: [
     './app/**/*.{js,jsx,ts,tsx}',
@@ -6,7 +9,25 @@ module.exports = {
   ],
   presets: [require('nativewind/preset')],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'nunito-regular': platformSelect({
+          ios: 'Nunito_400Regular',
+          android: 'Nunito_400Regular',
+          default: 'Nunito_400Regular'
+        }),
+        'nunito-medium': platformSelect({
+          ios: 'Nunito_500Medium',
+          android: 'Nunito_500Medium',
+          default: 'Nunito_500Medium'
+        }),
+        'nunito-bold': platformSelect({
+          ios: 'Nunito_700Bold',
+          android: 'Nunito_700Bold',
+          default: 'Nunito_700Bold'
+        }),
+      }
+    },
   },
   plugins: [],
 }

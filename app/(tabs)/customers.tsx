@@ -24,7 +24,7 @@ export default function CustomersScreen () {
       </View>
       <ScrollView>
         {Array.from({ length: 20 }, (_, i) => (
-          <CustomerCard key={i} />
+          <CustomerCard key={i.toString()} />
         ))}
       </ScrollView>
     </View>

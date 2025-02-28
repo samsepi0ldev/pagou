@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { View, Text, TouchableOpacity, FlatList } from 'react-native'
+import React, { useCallback, useMemo, useState } from 'react'
+import { View, Text, TouchableOpacity, FlatList, TouchableNativeFeedback } from 'react-native'
 import { ChartLine, ChevronLeft, ChevronRight, ListFilter } from 'lucide-react-native'
 import { eachMonthOfInterval, format } from 'date-fns'
 
@@ -21,43 +21,69 @@ const sales = [
 
 type GroupSalesByDate = Record<string, typeof sales>
 
-export default function SalesScreen () {
+export default function SalesScreen() {
   const [positionMonth, setPositionMonth] = useState(0)
   const currentYear = new Date().getFullYear()
 
-  const months = eachMonthOfInterval({
-    start: new Date(currentYear, 0, 1),
-    end: new Date(currentYear, 11, 31)
-  }).map(dateIsoString => format(dateIsoString, 'MMMM yy'))
+  const months = useMemo(() => {
+    return eachMonthOfInterval({
+      start: new Date(currentYear, 0, 1),
+      end: new Date(currentYear, 11, 31)
+    }).map(dateIsoString => format(dateIsoString, 'MMMM yy'))
+  }, [currentYear])
 
-  function nextMonth () {
+  function nextMonth() {
     if (positionMonth >= months.length - 1) return
     setPositionMonth(positionMonth + 1)
   }
 
-  function prevMonth () {
+  function prevMonth() {
     if (positionMonth <= 0) return
     setPositionMonth(positionMonth - 1)
   }
 
-  const groupSalesByDate = sales.reduce<GroupSalesByDate>((acc, curr) => {
-    const date = format(new Date(curr.created_at), 'eeee, dd MMMM yyyy')
-    if (!acc[date]) {
-      acc[date] = []
+  const { data, stickyHeaderIndices } = useMemo(() => {
+    const groupSalesByDate = sales.reduce<GroupSalesByDate>((acc, curr) => {
+      const date = format(new Date(curr.created_at), 'eeee, dd MMMM yyyy')
+      if (!acc[date]) {
+        acc[date] = []
+      }
+      acc[date].push(curr)
+      return acc
+    }, {})
+
+    const data = []
+    for (const date of Object.keys(groupSalesByDate)) {
+      data.push({ type: 'header', date })
+      data.push(...groupSalesByDate[date].map(sale => ({ type: 'item', ...sale })))
     }
-    acc[date].push(curr)
-    return acc
-  }, {})
 
-  const data = []
-  for (const date of Object.keys(groupSalesByDate)) {
-    data.push({ type: 'header', date })
-    data.push(...groupSalesByDate[date].map(sale => ({ type: 'item', ...sale })))
-  }
+    const stickyHeaderIndices = data
+      .map((item, index) => (item.type === 'header' ? index : null))
+      .filter(index => index !== null)
 
-  const stickyHeaderIndices = data
-    .map((item, index) => (item.type === 'header' ? index : null))
-    .filter(index => index !== null)
+    return {
+      data, stickyHeaderIndices
+    }
+  }, [])
+
+  const renderItem = useCallback(({ item }) => {
+    return item.type === 'header' ? (
+      <Text className='text-zinc-100 text-sm font-semibold w-full bg-zinc-800 py-2 px-4'>{item.date}</Text>
+    ) : (
+
+      <SalesPaymentInfo
+        href='/sale-info'
+        paid={false}
+        payment={{
+          id: item.id,
+          description: item.description,
+          price: item.price,
+          totalPayment: 0
+        }}
+      />
+    )
+  }, [])
 
   return (
     <View className='flex-1 bg-zinc-800'>
@@ -96,21 +122,11 @@ export default function SalesScreen () {
       <FlatList
         contentContainerClassName='py-4'
         data={data}
-        renderItem={({ item }) => item.type === 'header' ? (
-          <Text className='text-zinc-100 text-sm font-semibold w-full bg-zinc-800 py-2 px-4'>{item.date}</Text>
-        ) : (
-          <SalesPaymentInfo
-            paid={false}
-            payment={{
-              id: item.id,
-              description: item.description,
-              price: item.price,
-              totalPayment: 0
-            }}
-          />
-        )}
+        renderItem={renderItem}
         keyExtractor={(_, index) => index.toString()}
         stickyHeaderIndices={stickyHeaderIndices}
+        initialNumToRender={10}
+        windowSize={5}
       />
     </View>
   )
