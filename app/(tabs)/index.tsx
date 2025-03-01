@@ -88,7 +88,7 @@ export default function HomeScreen () {
               paid={true}
             />
           ))}
-          <TouchableNativeFeedback>
+          <TouchableNativeFeedback onPress={() => router.push('/payments-received')}>
             <View className='items-center justify-center py-4 mt-4 border-t border-t-zinc-700/50'>
               <Text>Ver pagamentos</Text>
             </View>

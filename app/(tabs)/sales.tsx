@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { View, TouchableOpacity, FlatList } from 'react-native'
 import { ChartLine, ChevronLeft, ChevronRight, ListFilter } from 'lucide-react-native'
 import { eachMonthOfInterval, format } from 'date-fns'
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
 import { Header } from '@/components/header'
 import { SalesPaymentInfo } from '@/components/sale-payment-info'
@@ -23,8 +24,12 @@ const sales = [
 
 type GroupSalesByDate = Record<string, typeof sales>
 
+const ANIMATION_DURATION = 100
+
 export default function SalesScreen() {
   const [positionMonth, setPositionMonth] = useState(0)
+  const translateY = useSharedValue(0)
+  const opacity = useSharedValue(1)
   const currentYear = new Date().getFullYear()
 
   const months = useMemo(() => {
@@ -36,13 +41,54 @@ export default function SalesScreen() {
 
   function nextMonth() {
     if (positionMonth >= months.length - 1) return
-    setPositionMonth(positionMonth + 1)
+
+    opacity.value = withTiming(0, { duration: ANIMATION_DURATION * 2 })
+    translateY.value = withTiming(10, {
+      duration: ANIMATION_DURATION,
+      easing: Easing.inOut(Easing.ease)
+    })
+
+    setTimeout(() => {
+      setPositionMonth(positionMonth + 1)
+      translateY.value = -10
+      opacity.value = 0
+
+      opacity.value = withTiming(1, { duration: ANIMATION_DURATION * 2 })
+      translateY.value = withTiming(0, {
+        duration: ANIMATION_DURATION,
+        easing: Easing.inOut(Easing.ease)
+      })
+    }, ANIMATION_DURATION)
   }
 
   function prevMonth() {
     if (positionMonth <= 0) return
-    setPositionMonth(positionMonth - 1)
+
+    opacity.value = withTiming(0, { duration: ANIMATION_DURATION / 2 })
+    translateY.value = withTiming(-10, {
+      duration: ANIMATION_DURATION,
+      easing: Easing.inOut(Easing.ease)
+    })
+
+    setTimeout(() => {
+      setPositionMonth(positionMonth - 1)
+      translateY.value = 10
+      opacity.value = 0
+      
+      opacity.value = withTiming(1, { duration: ANIMATION_DURATION / 2 })
+      translateY.value = withTiming(0, {
+        duration: ANIMATION_DURATION,
+        easing: Easing.inOut(Easing.ease)
+      })
+    }, ANIMATION_DURATION)
   }
+
+  const dateTextAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{
+      translateY: translateY.value
+    }],
+    opacity: opacity.value
+  }))
 
   const { data, stickyHeaderIndices } = useMemo(() => {
     const groupSalesByDate = sales.reduce<GroupSalesByDate>((acc, curr) => {
@@ -71,7 +117,7 @@ export default function SalesScreen() {
 
   const renderItem = useCallback(({ item }) => {
     return item.type === 'header' ? (
-      <Text variant='sm' className='w-full bg-zinc-800 py-2 px-4'>{item.date}</Text>
+      <Text variant='sm' className='w-full bg-zinc-800 py-2 px-4 capitalize'>{item.date}</Text>
     ) : (
       <SalesPaymentInfo
         href='/sale-info'
@@ -101,7 +147,12 @@ export default function SalesScreen() {
           <TouchableOpacity onPress={prevMonth}>
             <ChevronLeft color={colors.violet[100]} />
           </TouchableOpacity>
-          <Text variant='title'>{months[positionMonth]}</Text>
+          <Animated.Text
+            className='font-nunito-semibold text-lg text-violet-100 capitalize'
+            style={dateTextAnimatedStyle}
+          >
+            {months[positionMonth]}
+          </Animated.Text>
           <TouchableOpacity onPress={nextMonth}>
             <ChevronRight color={colors.violet[100]} />
           </TouchableOpacity>

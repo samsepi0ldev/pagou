@@ -2,13 +2,12 @@ import React from 'react'
 import { Stack } from 'expo-router/stack'
 import { StatusBar } from 'expo-status-bar'
 import Constants from 'expo-constants'
-import { SafeAreaView, View } from 'react-native'
+import { SafeAreaView } from 'react-native'
 import colors from 'tailwindcss/colors'
 import { Nunito_400Regular, Nunito_500Medium, Nunito_700Bold, Nunito_600SemiBold } from '@expo-google-fonts/nunito'
 import { useFonts } from 'expo-font'
 
 import '../lib/date-fns'
-
 import '../global.css'
 
 export default function Layout () {
@@ -32,8 +31,13 @@ export default function Layout () {
         <Stack.Screen name='sale-info' options={{ headerShown: false }} />
         <Stack.Screen name='create-sale' options={{ headerShown: false }} />
         <Stack.Screen name='create-customer' options={{ headerShown: false }} />
+        <Stack.Screen name='payments-received' options={{ headerShown: false }} />
       </Stack>
-      <StatusBar translucent style='dark' backgroundColor={colors.violet[500]} />
+      <StatusBar
+        translucent
+        style='dark'
+        backgroundColor={colors.violet[500]}
+      />
     </SafeAreaView>
   )
 }
