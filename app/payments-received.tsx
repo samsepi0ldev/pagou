@@ -1,5 +1,5 @@
 import { TouchableOpacity, View } from 'react-native'
-import { ChevronLeft, ChevronRight } from 'lucide-react-native'
+import { ChevronLeft, ChevronRight, CircleOff } from 'lucide-react-native'
 import { useMemo, useState } from 'react'
 import { eachMonthOfInterval, format } from 'date-fns'
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
@@ -11,17 +11,18 @@ import { Text } from '@/components/text'
 const ANIMATION_DURATION = 100
 
 export default function PaymentsReceived() {
-  const [positionMonth, setPositionMonth] = useState(0)
-  const translateY = useSharedValue(0)
-  const opacity = useSharedValue(1)
   const currentYear = new Date().getFullYear()
-
   const months = useMemo(() => {
     return eachMonthOfInterval({
       start: new Date(currentYear, 0, 1),
       end: new Date(currentYear, 11, 31)
     }).map(dateIsoString => format(dateIsoString, 'MMMM yy'))
   }, [currentYear])
+
+  const [positionMonth, setPositionMonth] = useState(months.indexOf(format(new Date(), 'MMMM yy')))
+  const translateY = useSharedValue(0)
+  const opacity = useSharedValue(1)
+  
 
   function nextMonth() {
     if (positionMonth >= months.length - 1) return
@@ -95,6 +96,10 @@ export default function PaymentsReceived() {
             <ChevronRight color={colors.violet[100]} />
           </TouchableOpacity>
         </View>
+      </View>
+      <View className='items-center justify-center gap-1 py-2'>
+        <Text>Total Recebido</Text>
+        <Text className='text-emerald-500'>R$ 1,100.00</Text>
       </View>
     </View>
   )

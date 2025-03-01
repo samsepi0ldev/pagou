@@ -27,11 +27,7 @@ type GroupSalesByDate = Record<string, typeof sales>
 const ANIMATION_DURATION = 100
 
 export default function SalesScreen() {
-  const [positionMonth, setPositionMonth] = useState(0)
-  const translateY = useSharedValue(0)
-  const opacity = useSharedValue(1)
   const currentYear = new Date().getFullYear()
-
   const months = useMemo(() => {
     return eachMonthOfInterval({
       start: new Date(currentYear, 0, 1),
@@ -39,10 +35,14 @@ export default function SalesScreen() {
     }).map(dateIsoString => format(dateIsoString, 'MMMM yy'))
   }, [currentYear])
 
+  const [positionMonth, setPositionMonth] = useState(months.indexOf(format(new Date(), 'MMMM yy')))
+  const translateY = useSharedValue(0)
+  const opacity = useSharedValue(1)
+  
   function nextMonth() {
     if (positionMonth >= months.length - 1) return
 
-    opacity.value = withTiming(0, { duration: ANIMATION_DURATION * 2 })
+    opacity.value = withTiming(0, { duration: ANIMATION_DURATION / 2 })
     translateY.value = withTiming(10, {
       duration: ANIMATION_DURATION,
       easing: Easing.inOut(Easing.ease)
@@ -53,7 +53,7 @@ export default function SalesScreen() {
       translateY.value = -10
       opacity.value = 0
 
-      opacity.value = withTiming(1, { duration: ANIMATION_DURATION * 2 })
+      opacity.value = withTiming(1, { duration: ANIMATION_DURATION / 2 })
       translateY.value = withTiming(0, {
         duration: ANIMATION_DURATION,
         easing: Easing.inOut(Easing.ease)
