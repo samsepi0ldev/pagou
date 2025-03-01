@@ -1,10 +1,12 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { View, Text, TouchableOpacity, FlatList, TouchableNativeFeedback } from 'react-native'
+import { View, TouchableOpacity, FlatList } from 'react-native'
 import { ChartLine, ChevronLeft, ChevronRight, ListFilter } from 'lucide-react-native'
 import { eachMonthOfInterval, format } from 'date-fns'
 
 import { Header } from '@/components/header'
 import { SalesPaymentInfo } from '@/components/sale-payment-info'
+import { Text } from '@/components/text'
+import colors from 'tailwindcss/colors'
 
 const sales = [
   { id: 1, description: 'Venda 1', price: 100, created_at: '2023-10-01T10:00:00Z' },
@@ -69,9 +71,8 @@ export default function SalesScreen() {
 
   const renderItem = useCallback(({ item }) => {
     return item.type === 'header' ? (
-      <Text className='text-zinc-100 text-sm font-semibold w-full bg-zinc-800 py-2 px-4'>{item.date}</Text>
+      <Text variant='sm' className='w-full bg-zinc-800 py-2 px-4'>{item.date}</Text>
     ) : (
-
       <SalesPaymentInfo
         href='/sale-info'
         paid={false}
@@ -90,32 +91,32 @@ export default function SalesScreen() {
       <View className='bg-violet-600'>
         <Header title='Vendas'>
           <TouchableOpacity>
-            <ChartLine color='#fff' />
+            <ChartLine color={colors.violet[100]} />
           </TouchableOpacity>
           <TouchableOpacity>
-            <ListFilter color='#fff' />
+            <ListFilter color={colors.violet[100]} />
           </TouchableOpacity>
         </Header>
         <View className='flex-row items-center justify-between px-6 py-4'>
           <TouchableOpacity onPress={prevMonth}>
-            <ChevronLeft color='#fff' />
+            <ChevronLeft color={colors.violet[100]} />
           </TouchableOpacity>
-          <Text className='text-violet-100 text-lg font-medium'>{months[positionMonth]}</Text>
+          <Text variant='title'>{months[positionMonth]}</Text>
           <TouchableOpacity onPress={nextMonth}>
-            <ChevronRight color='#fff' />
+            <ChevronRight color={colors.violet[100]} />
           </TouchableOpacity>
         </View>
       </View>
       <View className='flex-row items-center justify-between py-4 px-20 border-b border-b-zinc-700'>
         <View className='items-center justify-center'>
-          <Text className='text-zinc-100 font-semibold'>Total</Text>
+          <Text>Total</Text>
           <Text className='text-rose-500'>R$ 200,00</Text>
         </View>
 
         <View className='w-px h-full bg-zinc-700' />
 
         <View className='items-center justify-center'>
-          <Text className='text-zinc-100 font-semibold'>Pendente</Text>
+          <Text>Pendente</Text>
           <Text className='text-rose-500'>R$ 200,00</Text>
         </View>
       </View>

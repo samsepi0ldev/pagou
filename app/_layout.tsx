@@ -4,17 +4,18 @@ import { StatusBar } from 'expo-status-bar'
 import Constants from 'expo-constants'
 import { SafeAreaView, View } from 'react-native'
 import colors from 'tailwindcss/colors'
-import { Nunito_400Regular, Nunito_500Medium, Nunito_700Bold } from '@expo-google-fonts/nunito'
+import { Nunito_400Regular, Nunito_500Medium, Nunito_700Bold, Nunito_600SemiBold } from '@expo-google-fonts/nunito'
 import { useFonts } from 'expo-font'
 
+import '../lib/date-fns'
+
 import '../global.css'
-import { Plus } from 'lucide-react-native'
-import { FloaTActionButton } from '@/components/float-action-button'
 
 export default function Layout () {
   const [fontsLoaded] = useFonts({
     Nunito_400Regular,
     Nunito_500Medium,
+    Nunito_600SemiBold,
     Nunito_700Bold
   })
 

@@ -1,12 +1,17 @@
-import { Header } from '@/components/header'
-import { parseNumberToReal } from 'lib/utils'
 import { Trash2 } from 'lucide-react-native'
-import { Text, TouchableNativeFeedback, View } from 'react-native'
+import { TouchableNativeFeedback, View } from 'react-native'
+import { StatusBar } from 'react-native'
+import { useFocusEffect } from 'expo-router'
+
+import { Header } from '@/components/header'
+import { Text } from '@/components/text'
+import { parseNumberToReal } from '../lib/utils'
+import colors from 'tailwindcss/colors'
 
 export default function SalePaymentInfo() {
   return (
     <View className='flex-1'>
-      <View className='bg-emerald-600'>
+      <View className='bg-violet-600'>
         <Header
           backButton
           title='Detalhe do Pagamento'
@@ -17,10 +22,10 @@ export default function SalePaymentInfo() {
           <View className='flex-row items-center gap-4'>
             <View className='size-4 rounded-full mb-0.5 bg-emerald-600' />
             <View>
-              <Text className='text-zinc-100 text-base font-medium'>
+              <Text>
                 19/02/2025
               </Text>
-              <Text className='text-sm text-zinc-400'>
+              <Text variant='sm' className='text-zinc-400'>
                 {parseNumberToReal(100)}
               </Text>
             </View>

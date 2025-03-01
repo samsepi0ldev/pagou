@@ -1,5 +1,7 @@
 import type React from 'react'
-import { View, Text, type TextProps, type ViewProps } from 'react-native'
+import { View, type TextProps, type ViewProps } from 'react-native'
+
+import { Text } from '@/components/text'
 
 interface CardProps extends ViewProps {}
 
@@ -21,6 +23,6 @@ interface CardTitleProps extends TextProps {}
 
 export function CardTitle (props: CardTitleProps) {
   return (
-    <Text className='font-semibold text-zinc-100 mx-5 mt-4 mb-2' {...props} />
+    <Text variant='subtitle' className='mx-5 mt-4 mb-2' {...props} />
   )
 }

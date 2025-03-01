@@ -21,6 +21,11 @@ module.exports = {
           android: 'Nunito_500Medium',
           default: 'Nunito_500Medium'
         }),
+        'nunito-semibold': platformSelect({
+          ios: 'Nunito_600SemiBold',
+          android: 'Nunito_600SemiBold',
+          default: 'Nunito_600SemiBold'
+        }),
         'nunito-bold': platformSelect({
           ios: 'Nunito_700Bold',
           android: 'Nunito_700Bold',

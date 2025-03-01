@@ -1,4 +1,4 @@
-import { Link, router } from 'expo-router'
+import { router } from 'expo-router'
 import { Plus, UserPlus2, Wallet } from 'lucide-react-native'
 import { Pressable, View } from 'react-native'
 import Animated, {

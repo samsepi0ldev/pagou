@@ -1,8 +1,9 @@
 import React, { memo } from 'react'
-import { View, Text, TouchableNativeFeedback } from 'react-native'
+import { View, TouchableNativeFeedback } from 'react-native'
 import { twMerge } from 'tailwind-merge'
 import { Link, type LinkProps } from 'expo-router'
 
+import { Text } from '@/components/text'
 import { parseNumberToReal } from '../lib/utils'
 
 type SaleType = {
@@ -29,19 +30,19 @@ export const SalesPaymentInfo = memo(({ paid, payment, href }: SalesPaymentInfoP
                 paid ? 'bg-emerald-600' : 'bg-rose-600'
               )} />
               <View>
-                <Text className='text-zinc-100 text-base font-medium'>
+                <Text>
                   {payment.description}
                 </Text>
-                <Text className='text-sm text-zinc-400 font-sans'>
+                <Text variant='sm' className='text-zinc-400'>
                   {parseNumberToReal(payment.price)}
                 </Text>
               </View>
             </View>
             {(payment.totalPayment !== undefined) && (
               <View className='items-end'>
-                <Text className='text-sm text-zinc-100 font-medium'>Restante</Text>
+                <Text variant='sm'>Restante</Text>
                 <Text className='text-xs text-rose-500'>
-                  {parseNumberToReal(payment.totalPayment)}
+                  {parseNumberToReal(payment.price - payment.totalPayment)}
                 </Text>
               </View>
             )}

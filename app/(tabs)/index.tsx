@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView, TouchableNativeFeedback } from 'react-native'
+import { View, TouchableOpacity, ScrollView, TouchableNativeFeedback } from 'react-native'
 import { CircleMinus, CirclePlus, Cog } from 'lucide-react-native'
 import colors from 'tailwindcss/colors'
 import { router } from 'expo-router'
@@ -6,6 +6,13 @@ import { router } from 'expo-router'
 import { Header } from '@/components/header'
 import { Card, CardContent, CardTitle } from '@/components/card'
 import { SalesPaymentInfo } from '@/components/sale-payment-info'
+import { Text } from '@/components/text'
+
+const sales = [
+  { id: 1, description: 'Venda 1', price: 100, created_at: '2023-10-01T10:00:00Z', totalPayment: 100 },
+  { id: 2, description: 'Venda 2', price: 200, created_at: '2023-10-01T12:00:00Z', totalPayment: 100 },
+  { id: 3, description: 'Venda 3', price: 300, created_at: '2023-10-02T09:00:00Z', totalPayment: 300 },
+]
 
 export default function HomeScreen () {
   return (
@@ -17,53 +24,53 @@ export default function HomeScreen () {
           </TouchableOpacity>
         </Header>
         <View className='items-center pb-4'>
-          <Text className='text-base font-nunito-regular text-violet-100'>Valor pendente</Text>
+          <Text>Valor pendente</Text>
           <View className='flex-row items-baseline mt-1'>
-            <Text className='font-nunito-medium text-violet-100 mr-1'>R$</Text>
-            <Text className='text-4xl font-nunito-medium text-violet-100'>780,00</Text>
+            <Text variant='heading' className='text-base mr-1'>R$</Text>
+            <Text variant='heading'>780,00</Text>
           </View>
         </View>
       </View>
       <View className='flex-1 p-4 gap-4'>
         <Card>
-          <CardTitle>Visao Geral</CardTitle>
+          <CardTitle>Visão Geral</CardTitle>
          <CardContent>
           <View className='flex-row items-center justify-between'>
               <View className='flex-row items-center gap-1'>
                 <CircleMinus color={colors.rose[600]} />
-                <Text className='text-lg text-rose-600 font-semibold'>Vendas pendentes</Text>
+                <Text variant='title' className='text-rose-600'>Vendas pendentes</Text>
               </View>
-              <Text className='text-zinc-100 text-sm font-semibold'>7</Text>
+              <Text variant='sm'>7</Text>
             </View>
             <View className='flex-row items-center justify-between'>
               <View className='flex-row items-center gap-1'>
                 <CirclePlus color={colors.emerald[600]} />
-                <Text className='text-lg text-emerald-600 font-semibold'>Vendas pagas</Text>
+                <Text variant='title' className='text-emerald-600'>Vendas pagas</Text>
               </View>
-              <Text className='text-zinc-100 text-sm font-semibold'>24</Text>
+              <Text variant='sm'>24</Text>
             </View>
          </CardContent>
         </Card>
 
         <Card>
           <CardTitle>Vendas pendentes recentes</CardTitle>
-          {Array.from({ length: 3 }).map((_, i) => (
+          {sales.map(sale => (
             <SalesPaymentInfo
-              href='/sale-inf<FloaTActionButton />o'
-              key={i.toString()}
+              href='/sale-info'
+              key={sale.id}
               payment={{
-                id: 1,
-                description: 'C&A',
-                price: 8000,
-                totalPayment: 0
+                id: sale.id,
+                description: sale.description,
+                price: sale.price,
+                totalPayment: sale.totalPayment,
               }}
-              paid={false}
+              paid={sale.totalPayment === sale.price}
             />
           ))}
    
           <TouchableNativeFeedback onPress={() => router.push('/sales')}>
             <View className='items-center justify-center py-4 mt-4 border-t border-t-zinc-700/50'>
-              <Text className='text-zinc-100 font-medium'>Ver vendas</Text>
+              <Text>Ver vendas</Text>
             </View>
           </TouchableNativeFeedback>
         </Card>
@@ -83,7 +90,7 @@ export default function HomeScreen () {
           ))}
           <TouchableNativeFeedback>
             <View className='items-center justify-center py-4 mt-4 border-t border-t-zinc-700/50'>
-              <Text className='text-zinc-100 font-medium'>Ver pagamentos</Text>
+              <Text>Ver pagamentos</Text>
             </View>
           </TouchableNativeFeedback>
         </Card>
