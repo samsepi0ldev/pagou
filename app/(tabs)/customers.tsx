@@ -1,9 +1,10 @@
 import { ChartLine, ListFilter, Search } from 'lucide-react-native'
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
+import { View, TouchableOpacity, ScrollView } from 'react-native'
 import colors from 'tailwindcss/colors'
 
 import { CustomerCard } from '@/components/customer-card'
 import { Header } from '@/components/header'
+import { Link } from 'expo-router'
 
 export default function CustomersScreen () {
   return (

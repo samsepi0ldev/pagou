@@ -1,8 +1,9 @@
 import { Check, HandCoins, NotebookText } from 'lucide-react-native'
-import { ScrollView, TextInput, TouchableOpacity, View } from 'react-native'
+import { ScrollView, TouchableOpacity, View } from 'react-native'
 import colors from 'tailwindcss/colors'
 
 import { Header } from '@/components/header'
+import { Input, InputIcon, InputRoot } from '@/components/input'
 
 export default function CreateSale () {
   return (
@@ -17,23 +18,23 @@ export default function CreateSale () {
         </Header>
       </View>
       <ScrollView contentContainerClassName='p-4 gap-4'>
-        <View className='rounded-lg border border-zinc-700 px-4 py-1 flex-row gap-2 items-center'>
-          <NotebookText strokeWidth={1} size={24} color={colors.zinc[300]} />
-          <TextInput
-            className='placeholder-zinc-100 text-lg text-zinc-100'
+        <InputRoot>
+          <InputIcon>
+            <NotebookText strokeWidth={1} size={24} color={colors.zinc[300]} />
+          </InputIcon>
+          <Input
             placeholder='Descrição do serviço ou produto'
-            placeholderTextColor={colors.zinc[400]}
           />
-        </View>
+        </InputRoot>
 
-        <View className='rounded-lg border border-zinc-700 px-4 py-1 flex-row gap-2 items-center'>
-          <HandCoins strokeWidth={1} size={24} color={colors.zinc[300]} />
-          <TextInput
-            className='placeholder-zinc-100 text-lg text-zinc-100'
+        <InputRoot>
+          <InputIcon>
+            <HandCoins strokeWidth={1} size={24} color={colors.zinc[300]} />
+          </InputIcon>
+          <Input
             placeholder='Valor'
-            placeholderTextColor={colors.zinc[400]}
           />
-        </View>
+        </InputRoot>
       </ScrollView>
     </View>
   )
