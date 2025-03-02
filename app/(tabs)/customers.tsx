@@ -1,10 +1,10 @@
 import { ChartLine, ListFilter, Search } from 'lucide-react-native'
-import { View, TouchableOpacity, ScrollView } from 'react-native'
+import { View, TouchableOpacity, FlatList } from 'react-native'
 import colors from 'tailwindcss/colors'
 
 import { CustomerCard } from '@/components/customer-card'
 import { Header } from '@/components/header'
-import { Link } from 'expo-router'
+import { Text } from '@/components/text'
 
 export default function CustomersScreen () {
   return (
@@ -24,11 +24,20 @@ export default function CustomersScreen () {
           </View>
         </Header>
       </View>
-      <ScrollView>
-        {Array.from({ length: 20 }, (_, i) => (
-          <CustomerCard key={i.toString()} />
-        ))}
-      </ScrollView>
+      <FlatList
+        data={Array.from({ length: 20 })}
+        keyExtractor={(_, i) => i.toString()}
+        renderItem={({ item }) => (
+          <CustomerCard />
+        )}
+        initialNumToRender={10}
+        windowSize={5}
+        contentContainerClassName='pb-16'
+      />
+      <View className='flex-row px-5 py-6'>
+        <Text variant='header'>Total Pendente: </Text>
+        <Text variant='header' className='text-rose-600'>R$ 300,00</Text>
+      </View>
     </View>
   )
 }

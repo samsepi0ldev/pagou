@@ -7,6 +7,7 @@ import { format } from 'date-fns'
 import { Header } from '@/components/header'
 import { Text } from '@/components/text'
 import { SalesPaymentInfo } from '@/components/sale-payment-info'
+import { router } from 'expo-router'
 
 const sales = [
   { id: 1, description: 'Venda 1', price: 100, created_at: '2023-10-01T10:00:00Z' },
@@ -90,7 +91,13 @@ export default function CustomerDetails () {
           <CircleUserRound size={48} color={colors.zinc[500]} />
           <Text variant='title'>John Doe</Text>
         </View>
-        <TouchableNativeFeedback>
+        <TouchableNativeFeedback onPress={() => 
+          router.push({
+            pathname: '/create-sale',
+            params: { 
+              customer_id: '01955576-8403-70d4-9698-ef6fa932ae52' 
+            }
+          })}>
           <View className='w-min self-end'>
             <Text className='uppercase text-violet-400 px-2 py-0.5'>Adicionar venda</Text>
           </View>
@@ -110,7 +117,7 @@ export default function CustomerDetails () {
         </View>
       </View>
       <FlatList
-        contentContainerClassName='py-4'
+        contentContainerClassName='pt-4 pb-16'
         data={data}
         renderItem={renderItem}
         keyExtractor={(_, index) => index.toString()}
