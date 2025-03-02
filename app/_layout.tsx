@@ -33,6 +33,8 @@ export default function Layout () {
         <Stack.Screen name='create-customer' options={{ headerShown: false }} />
         <Stack.Screen name='payments-received' options={{ headerShown: false }} />
         <Stack.Screen name='contacts' options={{ headerShown: false }} />
+        <Stack.Screen name='settings' options={{ headerShown: false }} />
+        <Stack.Screen name='customer-details' options={{ headerShown: false }} />
       </Stack>
       <StatusBar
         translucent

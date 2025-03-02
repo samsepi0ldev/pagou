@@ -1,7 +1,7 @@
 import { View, TouchableOpacity, ScrollView, TouchableNativeFeedback } from 'react-native'
 import { CircleMinus, CirclePlus, Cog } from 'lucide-react-native'
 import colors from 'tailwindcss/colors'
-import { router } from 'expo-router'
+import { Link, router } from 'expo-router'
 
 import { Header } from '@/components/header'
 import { Card, CardContent, CardTitle } from '@/components/card'
@@ -19,9 +19,9 @@ export default function HomeScreen () {
     <ScrollView className='flex-1 bg-zinc-900'>
       <View className='bg-violet-600'>
         <Header title=''>
-          <TouchableOpacity>
+          <Link href='/settings'>
             <Cog color='#fff' />
-          </TouchableOpacity>
+          </Link>
         </Header>
         <View className='items-center pb-4'>
           <Text>Valor pendente</Text>
