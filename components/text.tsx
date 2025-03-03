@@ -1,6 +1,7 @@
-import { cva, type VariantProps } from 'class-variance-authority'
+import { type VariantProps, cva } from 'class-variance-authority'
 import { Text as PrimitiveText, type TextProps } from 'react-native'
 
+import React from 'react'
 import { cn } from '../lib/utils'
 
 interface TextPropsTypes extends TextProps, VariantProps<typeof textVariants> {}
@@ -15,15 +16,15 @@ const textVariants = cva('text-violet-100', {
       description: 'font-nunito-regular text-zinc-500',
       header: 'text-lg font-nunito-bold',
       base: 'text-base font-nunito-medium',
-      sm: 'text-sm font-nunito-medium'
-    }
+      sm: 'text-sm font-nunito-medium',
+    },
   },
   defaultVariants: {
-    variant: 'base'
-  }
+    variant: 'base',
+  },
 })
 
-export function Text ({ className, variant, ...props }: TextPropsTypes) {
+export function Text({ className, variant, ...props }: TextPropsTypes) {
   return (
     <PrimitiveText
       className={cn(textVariants({ className, variant }))}

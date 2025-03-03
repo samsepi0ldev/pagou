@@ -60,7 +60,7 @@ export default function Layout() {
         </Stack>
         <StatusBar
           translucent
-          style="dark"
+          style="light"
           backgroundColor={colors.violet[500]}
         />
       </SafeAreaView>
