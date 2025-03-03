@@ -1,5 +1,6 @@
-import { TouchableOpacity, View } from 'react-native'
 import type * as Contacts from 'expo-contacts'
+import { memo } from 'react'
+import { TouchableOpacity, View } from 'react-native'
 
 import { Text } from '@/components/text'
 import Avatar from './avatar'
@@ -12,16 +13,20 @@ interface ContactProps {
   }
 }
 
-export function Contact({ data: { image, name, phoneNumber } }: ContactProps) {
-  return (
-    <TouchableOpacity>
-      <View className='flex-row gap-4'>
-        <Avatar image={image} />
-        <View>
-          <Text variant='header' className='text-2xl'>{name}</Text>
-          <Text variant='sm'>{phoneNumber}</Text>
+export const Contact = memo(
+  ({ data: { image, name, phoneNumber } }: ContactProps) => {
+    return (
+      <TouchableOpacity className="py-1">
+        <View className="flex-row gap-4">
+          <Avatar image={image} />
+          <View>
+            <Text variant="header" className="text-2xl">
+              {name}
+            </Text>
+            <Text variant="sm">{phoneNumber}</Text>
+          </View>
         </View>
-      </View>
-    </TouchableOpacity>
-  )
-}
+      </TouchableOpacity>
+    )
+  }
+)

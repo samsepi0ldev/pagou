@@ -57,6 +57,10 @@ export default function Layout() {
             name="customer-details"
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="customer-search"
+            options={{ headerShown: false }}
+          />
         </Stack>
         <StatusBar
           translucent

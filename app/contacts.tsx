@@ -13,22 +13,23 @@ import colors from 'tailwindcss/colors'
 
 import { Contact } from '@/components/contact'
 import { Text } from '@/components/text'
+import { FlashList } from '@shopify/flash-list'
 
 type ContactPops = {
   id: string
   name: string
   image: Contacts.Image
   phoneNumber: string | null
-}[]
+}
 
 type SectionListDataProps = {
   title: string
-  data: ContactPops
+  data: ContactPops[]
 }
 
 export default function ContactsScreen() {
   const [name, setName] = useState('')
-  const [contacts, setContacts] = useState<SectionListDataProps[]>([])
+  const [contacts, setContacts] = useState<(string | ContactPops)[]>([])
   async function fetchContacts() {
     try {
       const { status } = await Contacts.requestPermissionsAsync()
@@ -63,14 +64,25 @@ export default function ContactsScreen() {
             return acc
           }, [])
 
-        setContacts(list)
+        const listOptimize = transformSectionsToFlatArray(list)
+        setContacts(listOptimize)
       }
     } catch (error) {
       console.log(error)
       Alert.alert('Error', 'Error')
     }
   }
+  function transformSectionsToFlatArray(sections: SectionListDataProps[]) {
+    const flatArray: (string | ContactPops)[] = []
 
+    for (const section of sections) {
+      flatArray.push(section.title)
+      flatArray.push(...section.data)
+    }
+    return flatArray
+  }
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     fetchContacts()
   }, [name])
@@ -88,25 +100,32 @@ export default function ContactsScreen() {
             placeholder="Buscar"
             onChangeText={text => setName(text)}
             value={name}
+            autoFocus
           />
           <TouchableOpacity onPress={() => setName('')}>
             <X size={24} color={colors.violet[100]} />
           </TouchableOpacity>
         </View>
       </View>
-      <SectionList
-        contentContainerClassName="px-4 py-8 gap-3"
-        sections={contacts}
-        keyExtractor={item => item.id}
-        renderItem={({ item }) => <Contact data={item} />}
-        renderSectionHeader={({ section }) => (
-          <Text className="size-9 rounded-lg bg-violet-500 text-center align-middle mt-10">
-            {section.title}
-          </Text>
-        )}
-        windowSize={5}
-        initialNumToRender={10}
-        showsVerticalScrollIndicator={false}
+
+      <FlashList
+        data={contacts}
+        contentContainerClassName="pb-20"
+        className="px-4 py-8"
+        renderItem={({ item }) => {
+          if (typeof item === 'string') {
+            return (
+              <Text className="size-9 rounded-lg bg-violet-500 text-center align-middle mt-10 mb-2">
+                {item}
+              </Text>
+            )
+          }
+          return <Contact data={item} />
+        }}
+        getItemType={item => {
+          return typeof item === 'string' ? 'sectionHeader' : 'row'
+        }}
+        estimatedItemSize={contacts.length}
       />
     </View>
   )

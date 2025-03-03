@@ -249,7 +249,7 @@ export default function SalesScreen() {
         </View>
       </View>
       <FlatList
-        contentContainerClassName="py-4"
+        contentContainerClassName="py-4 pb-24"
         data={data}
         renderItem={renderItem}
         keyExtractor={(_, index) => index.toString()}
@@ -266,12 +266,11 @@ export default function SalesScreen() {
         }}
         handleComponent={() => null}
       >
-        <BottomSheetView className="px-4">
-          <TouchableOpacity
-            className="size-12 absolute top-2 right-2 items-center justify-center"
-            onPress={handleCloseBottomSheet}
-          >
-            <X size={24} color={colors.zinc[400]} />
+        <BottomSheetView className="px-6 py-4 flex-1">
+          <TouchableOpacity onPress={handleCloseBottomSheet}>
+            <View className="size-10 absolute top-2 right-0 items-center justify-center bg-zinc-600 rounded-md">
+              <X size={24} color={colors.zinc[400]} />
+            </View>
           </TouchableOpacity>
         </BottomSheetView>
       </BottomSheet>
