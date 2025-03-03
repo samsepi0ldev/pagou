@@ -7,14 +7,17 @@ import {
 import Constants from 'expo-constants'
 import { useFonts } from 'expo-font'
 import { Stack } from 'expo-router/stack'
+import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import colors from 'tailwindcss/colors'
 
 import '../lib/date-fns'
 import '../global.css'
-import { GestureHandlerRootView } from 'react-native-gesture-handler'
+
+SplashScreen.preventAutoHideAsync()
 
 export default function Layout() {
   const [fontsLoaded] = useFonts({
@@ -23,6 +26,12 @@ export default function Layout() {
     Nunito_600SemiBold,
     Nunito_700Bold,
   })
+
+  useEffect(() => {
+    if (fontsLoaded) {
+      SplashScreen.hideAsync()
+    }
+  }, [fontsLoaded])
 
   if (!fontsLoaded) return
 

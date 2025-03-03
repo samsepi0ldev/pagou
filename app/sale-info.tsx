@@ -101,7 +101,7 @@ export default function SaleInfo() {
       >
         <BottomSheetView className="px-4 pt-16">
           <TouchableOpacity
-            className="size-12 absolute top-2 right-2 items-center justify-center"
+            className="size-10 absolute top-4 right-4 items-center justify-center bg-zinc-600 rounded-md"
             onPress={handleCloseBottomSheet}
           >
             <X size={24} color={colors.zinc[400]} />
@@ -116,23 +116,24 @@ export default function SaleInfo() {
               <Text className="text-emerald-600">R$ 0,00</Text>
             </View>
             <View className="items-center">
-              <Text>VRestante</Text>
+              <Text>Restante</Text>
               <Text className="text-zinc-400">R$ 100,00</Text>
             </View>
           </View>
-          <View className="items-center justify-center">
+          <View className="items-center justify-center pt-8">
             <Text>Quanto o cliente vai pagar?</Text>
             <TextInput
-              className="text-4xl text-green-600"
+              className="text-4xl text-green-600 mb-8"
               placeholder="R$ 0,00"
+              placeholderTextColor={colors.zinc[400]}
             />
-            <View className="items-center justify-center">
-              <TouchableOpacity>
-                <Text>Pagar parcial</Text>
+            <View className="items-center justify-center gap-2">
+              <TouchableOpacity className="w-72 px-4 py-1.5 bg-zinc-600 items-center justify-center rounded-md">
+                <Text variant="title">Pagar parcial</Text>
               </TouchableOpacity>
               <Text variant="sm">ou</Text>
-              <TouchableOpacity>
-                <Text>Pagar total</Text>
+              <TouchableOpacity className="w-72 px-4 py-1.5 bg-violet-600 items-center justify-center rounded-md">
+                <Text variant="title">Pagar total</Text>
               </TouchableOpacity>
             </View>
           </View>

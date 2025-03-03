@@ -5,25 +5,27 @@
     "slug": "me-pague",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "icon": "./assets/images/icon.png",
+    "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/images/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#7008e7"
     },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundImage": "./assets/images/adaptive-icon.png",
+        "monochromeImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#7008e7"
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png",
+      "favicon": "./assets/images/favicon.png",
       "bundler": "metro"
     },
     "plugins": [
@@ -35,7 +37,16 @@
           "contactsPermission": "Allow $(PRODUCT_NAME) to access your contacts."
         }
       ],
-      "expo-sqlite"
+      "expo-sqlite",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash-icon.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#7008e7",
+          "imageWidth": 200
+        }
+      ]
     ]
   }
 }
