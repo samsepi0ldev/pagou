@@ -1,4 +1,5 @@
 import type * as Contacts from 'expo-contacts'
+import { router } from 'expo-router'
 import { memo } from 'react'
 import { TouchableOpacity, View } from 'react-native'
 
@@ -16,7 +17,15 @@ interface ContactProps {
 export const Contact = memo(
   ({ data: { image, name, phoneNumber } }: ContactProps) => {
     return (
-      <TouchableOpacity className="py-1">
+      <TouchableOpacity
+        className="py-1"
+        onPress={() =>
+          router.push({
+            pathname: '/create-customer',
+            params: { name, phoneNumber },
+          })
+        }
+      >
         <View className="flex-row gap-4">
           <Avatar image={image} />
           <View>

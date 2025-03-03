@@ -38,7 +38,7 @@ export default function CreateSale() {
         </Header>
       </View>
       <ScrollView contentContainerClassName="p-4 gap-4">
-        {!customer_id && <Text>customer id not provided</Text>}
+        {!!customer_id && <Text>{customer_id}</Text>}
         <InputRoot>
           <InputIcon>
             <NotebookText strokeWidth={1} size={24} color={colors.zinc[300]} />
@@ -58,7 +58,7 @@ export default function CreateSale() {
             <InputIcon>
               <Calendar strokeWidth={1} size={24} color={colors.zinc[300]} />
             </InputIcon>
-            <Text className="py-3">{date.toLocaleDateString()}</Text>
+            <Input value={date.toLocaleDateString()} readOnly />
           </InputRoot>
         </TouchableOpacity>
       </ScrollView>
