@@ -33,7 +33,10 @@ export default function SaleInfo() {
           </TouchableOpacity>
         </Header>
       </View>
-      <ScrollView contentContainerClassName="px-4 py-5 gap-6 flex-1">
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerClassName="px-4 py-5 gap-6 flex-1"
+      >
         <View className="flex-row items-center gap-4">
           <CircleUserRound size={48} color={colors.zinc[500]} />
           <Text variant="heading-sub-title">John Doe</Text>

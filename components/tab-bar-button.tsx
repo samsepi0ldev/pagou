@@ -1,5 +1,5 @@
 import { CircleUserRound, Home, PiggyBank, User2 } from 'lucide-react-native'
-import { useEffect } from 'react'
+import { type ReactNode, useEffect } from 'react'
 import { Pressable } from 'react-native'
 import Animated, {
   interpolate,
@@ -7,7 +7,6 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated'
-import colors from 'tailwindcss/colors'
 
 interface TabBarButtonProps {
   onPress: () => void
@@ -15,7 +14,14 @@ interface TabBarButtonProps {
   isFocused: boolean
   routeName: string
   color: string
-  label: string
+  label:
+    | string
+    | ((props: {
+        focused: boolean
+        color: string
+        position: LabelPosition
+        children: string
+      }) => ReactNode)
 }
 
 export function TabBarButton({

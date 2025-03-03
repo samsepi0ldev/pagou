@@ -38,6 +38,7 @@ export default function CustomersScreen() {
         initialNumToRender={10}
         windowSize={5}
         contentContainerClassName="pb-16"
+        showsVerticalScrollIndicator={false}
       />
       <View className="flex-row px-5 py-6">
         <Text variant="header">Total Pendente: </Text>

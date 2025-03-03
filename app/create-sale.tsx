@@ -29,7 +29,7 @@ export default function CreateSale() {
     })
   }
   return (
-    <View className="flex-1 bg-zinc-900">
+    <View className="flex-1 bg-zinc-800">
       <View className="bg-violet-600">
         <Header backButton title="Registrar Venda">
           <TouchableOpacity className="size-8 items-center justify-center">

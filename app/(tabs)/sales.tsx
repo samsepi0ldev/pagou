@@ -256,6 +256,7 @@ export default function SalesScreen() {
         stickyHeaderIndices={stickyHeaderIndices}
         initialNumToRender={10}
         windowSize={5}
+        showsVerticalScrollIndicator={false}
       />
       <BottomSheet
         ref={bottomSheetRef}

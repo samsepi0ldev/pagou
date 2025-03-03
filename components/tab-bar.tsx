@@ -1,12 +1,6 @@
-import {
-  type BottomTabBarProps,
-  createBottomTabNavigator,
-} from '@react-navigation/bottom-tabs'
-import { PlatformPressable } from '@react-navigation/elements'
-import { useLinkBuilder, useTheme } from '@react-navigation/native'
-import { CircleUserRound, Home, PiggyBank, User2 } from 'lucide-react-native'
+import type { BottomTabBarProps } from '@react-navigation/bottom-tabs'
 import { useState } from 'react'
-import { type LayoutChangeEvent, Platform, View } from 'react-native'
+import { type LayoutChangeEvent, View } from 'react-native'
 import colors from 'tailwindcss/colors'
 
 import Animated, {
@@ -14,6 +8,7 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated'
+
 import { TabBarButton } from './tab-bar-button'
 
 export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {

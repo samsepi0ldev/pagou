@@ -10,7 +10,7 @@ import Animated, {
   useSharedValue,
   withDelay,
   withSpring,
-  withTiming
+  withTiming,
 } from 'react-native-reanimated'
 import colors from 'tailwindcss/colors'
 
@@ -28,15 +28,15 @@ export function FloaTActionButton() {
   function handlePress() {
     const config = {
       easing: Easing.bezier(0.68, -0.6, 0.32, 1.6),
-      duration: 500
+      duration: 500,
     }
     if (isOpen.value) {
-      firstWidth.value = withTiming(56, { duration: 100 }, (finish) => {
+      firstWidth.value = withTiming(56, { duration: 100 }, finish => {
         if (finish) {
           firstValue.value = withTiming(30, config)
         }
       })
-      secondWidth.value = withTiming(56, { duration: 100 }, (finish) => {
+      secondWidth.value = withTiming(56, { duration: 100 }, finish => {
         if (finish) {
           secondValue.value = withDelay(50, withTiming(30, config))
         }
@@ -45,9 +45,9 @@ export function FloaTActionButton() {
     } else {
       firstValue.value = withDelay(200, withSpring(100))
       secondValue.value = withDelay(100, withSpring(170))
-      firstWidth.value = withDelay(1200, withSpring(200))
-      secondWidth.value = withDelay(1100, withSpring(200))
-      opacity.value = withDelay(1300, withSpring(1))
+      firstWidth.value = withDelay(700, withSpring(200))
+      secondWidth.value = withDelay(800, withSpring(200))
+      opacity.value = withDelay(800, withSpring(1))
     }
     isOpen.value = !isOpen.value
   }
@@ -61,18 +61,18 @@ export function FloaTActionButton() {
     )
     return {
       bottom: firstValue.value,
-      transform: [{ scale }]
+      transform: [{ scale }],
     }
   })
 
   const firstWidthStyle = useAnimatedStyle(() => ({
-    width: firstWidth.value
+    width: firstWidth.value,
   }))
   const secondWidthStyle = useAnimatedStyle(() => ({
-    width: firstWidth.value
+    width: firstWidth.value,
   }))
   const opacityText = useAnimatedStyle(() => ({
-    opacity: opacity.value
+    opacity: opacity.value,
   }))
 
   const secondIcon = useAnimatedStyle(() => {
@@ -84,31 +84,31 @@ export function FloaTActionButton() {
     )
     return {
       bottom: secondValue.value,
-      transform: [{ scale }]
+      transform: [{ scale }],
     }
   })
 
   const progressStyle = useAnimatedStyle(() => ({
-    transform: [{
-      rotate: `${progress.value * 180}deg`
-    }]
+    transform: [
+      {
+        rotate: `${progress.value * 180}deg`,
+      },
+    ],
   }))
 
   return (
-    <View className='absolute bottom-24 right-8'>
+    <View className="absolute bottom-24 right-8">
       <Pressable onPress={() => router.push('/create-customer')}>
         <Animated.View
           style={[secondIcon, secondWidthStyle]}
-          className='absolute bottom-0 right-0 bg-violet-500 rounded-full flex-row items-center'
+          className="absolute bottom-0 right-0 bg-violet-500 rounded-full flex-row items-center"
         >
-          <View
-            className='size-16 items-center justify-center'
-          >
+          <View className="size-16 items-center justify-center">
             <UserPlus2 size={24} color={colors.violet[100]} />
           </View>
           <Animated.Text
             style={opacityText}
-            className='font-nunito-bold text-lg text-violet-100'
+            className="font-nunito-bold text-lg text-violet-100"
           >
             Novo cliente
           </Animated.Text>
@@ -118,14 +118,14 @@ export function FloaTActionButton() {
       <Pressable onPress={() => router.push('/create-sale')}>
         <Animated.View
           style={[firstIcon, firstWidthStyle]}
-          className='absolute bottom-0 right-0 bg-violet-500 rounded-full flex-row items-center'
+          className="absolute bottom-0 right-0 bg-violet-500 rounded-full flex-row items-center"
         >
-          <View className='size-16 items-center justify-center'>
+          <View className="size-16 items-center justify-center">
             <Wallet size={24} color={colors.violet[100]} />
           </View>
           <Animated.Text
             style={opacityText}
-            className='font-nunito-bold text-lg text-violet-100'
+            className="font-nunito-bold text-lg text-violet-100"
           >
             Nova venda
           </Animated.Text>
@@ -134,10 +134,10 @@ export function FloaTActionButton() {
 
       <Pressable
         onPress={handlePress}
-        className='absolute bottom-0 right-0 bg-violet-500 rounded-full'
+        className="absolute bottom-0 right-0 bg-violet-500 rounded-full"
       >
         <Animated.View
-          className='size-16 items-center justify-center'
+          className="size-16 items-center justify-center"
           style={progressStyle}
         >
           <Plus size={18} color={colors.violet[100]} />
