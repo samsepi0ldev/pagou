@@ -14,6 +14,7 @@ import colors from 'tailwindcss/colors'
 
 import { Text } from '@/components/text'
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
+import { router } from 'expo-router'
 import { useRef } from 'react'
 
 export default function SaleInfo() {
@@ -25,7 +26,10 @@ export default function SaleInfo() {
     <View className="flex-1 bg-zinc-900">
       <View className="bg-violet-600">
         <Header backButton title="Detalhes da venda">
-          <TouchableOpacity className="size-8 items-center justify-center">
+          <TouchableOpacity
+            onPress={() => router.push({ pathname: '/edit-sale' })}
+            className="size-8 items-center justify-center"
+          >
             <Pencil size={24} color={colors.violet[100]} />
           </TouchableOpacity>
           <TouchableOpacity className="size-8 items-center justify-center">
@@ -73,7 +77,10 @@ export default function SaleInfo() {
             <DollarSign size={24} color={colors.zinc[500]} />
             <Text className="text-zinc-400">Adicionar Pagamento</Text>
           </TouchableOpacity>
-          <TouchableOpacity className="flex-row items-center gap-4">
+          <TouchableOpacity
+            className="flex-row items-center gap-4"
+            onPress={() => router.push({ pathname: '/payments-from-sale' })}
+          >
             <Wallet size={24} color={colors.zinc[500]} />
             <Text className="text-zinc-400">Ver Pagamentos</Text>
           </TouchableOpacity>

@@ -47,6 +47,8 @@ export default function Layout() {
             name="create-customer"
             options={{ headerShown: false }}
           />
+          <Stack.Screen name="edit-sale" options={{ headerShown: false }} />
+          <Stack.Screen name="edit-customer" options={{ headerShown: false }} />
           <Stack.Screen
             name="payments-received"
             options={{ headerShown: false }}
@@ -59,6 +61,10 @@ export default function Layout() {
           />
           <Stack.Screen
             name="customer-search"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="payments-from-sale"
             options={{ headerShown: false }}
           />
         </Stack>

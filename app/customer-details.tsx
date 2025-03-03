@@ -126,7 +126,9 @@ export default function CustomerDetails() {
     <View className="flex-1 bg-zinc-800">
       <View className="bg-violet-600">
         <Header backButton title="Detalhes do cliente">
-          <TouchableNativeFeedback>
+          <TouchableNativeFeedback
+            onPress={() => router.push({ pathname: '/edit-customer' })}
+          >
             <View>
               <Pencil size={24} color={colors.violet[100]} />
             </View>

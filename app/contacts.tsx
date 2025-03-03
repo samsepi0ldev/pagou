@@ -50,7 +50,9 @@ export default function ContactsScreen() {
               : 'Erro ao ler numero',
           }))
           .reduce<SectionListDataProps[]>((acc, curr) => {
-            const firstLetter = curr.name.charAt(0).toUpperCase()
+            const char = curr.name.charAt(0).toUpperCase()
+            const isLetter = /^[a-zA-Z]$/.test(char)
+            const firstLetter = isLetter ? char : '#'
             const existsEntry = acc.find(
               (entry: SectionListDataProps) => entry.title === firstLetter
             )
@@ -125,7 +127,7 @@ export default function ContactsScreen() {
         getItemType={item => {
           return typeof item === 'string' ? 'sectionHeader' : 'row'
         }}
-        estimatedItemSize={contacts.length}
+        estimatedItemSize={49.1}
       />
     </View>
   )
