@@ -1,5 +1,6 @@
 import { router } from 'expo-router'
-import { Plus, UserPlus2, Wallet } from 'lucide-react-native'
+import { EmptyWalletAdd, UserAdd } from 'iconsax-react-native'
+import { Plus } from 'lucide-react-native'
 import { Pressable, View } from 'react-native'
 import Animated, {
   Easing,
@@ -104,7 +105,7 @@ export function FloaTActionButton() {
           className="absolute bottom-0 right-0 bg-violet-500 rounded-full flex-row items-center"
         >
           <View className="size-16 items-center justify-center">
-            <UserPlus2 size={24} color={colors.violet[100]} />
+            <UserAdd size={24} color={colors.violet[100]} />
           </View>
           <Animated.Text
             style={opacityText}
@@ -121,7 +122,7 @@ export function FloaTActionButton() {
           className="absolute bottom-0 right-0 bg-violet-500 rounded-full flex-row items-center"
         >
           <View className="size-16 items-center justify-center">
-            <Wallet size={24} color={colors.violet[100]} />
+            <EmptyWalletAdd size={24} color={colors.violet[100]} />
           </View>
           <Animated.Text
             style={opacityText}

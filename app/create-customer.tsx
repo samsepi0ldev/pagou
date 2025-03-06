@@ -6,6 +6,7 @@ import colors from 'tailwindcss/colors'
 
 import { Header } from '@/components/header'
 import { Input, InputIcon, InputRoot } from '@/components/input'
+import { Text } from '@/components/text'
 
 type CustomerLocalSearchParams = {
   name?: string
@@ -27,10 +28,6 @@ export default function CreateCustomer() {
           <Link href="/contacts" className="size-8 items-center justify-center">
             <Search size={24} color={colors.violet[100]} />
           </Link>
-
-          <TouchableOpacity className="size-8 items-center justify-center">
-            <Check size={24} color={colors.violet[100]} />
-          </TouchableOpacity>
         </Header>
       </View>
       <ScrollView contentContainerClassName="p-4 gap-4">
@@ -68,6 +65,14 @@ export default function CreateCustomer() {
             onChangeText={text => setCustomer({ ...customer, email: text })}
           />
         </InputRoot>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          className="rounded-lg bg-violet-500  px-4 py-4 flex-row gap-2 items-center justify-center"
+        >
+          <Text variant="header" className="leading-0">
+            Salvar
+          </Text>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   )

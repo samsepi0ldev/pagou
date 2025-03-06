@@ -1,7 +1,10 @@
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
+import { useQuery } from '@tanstack/react-query'
 import { Link } from 'expo-router'
-import { ChartLine, ListFilter, Search, X } from 'lucide-react-native'
-import { useRef } from 'react'
+import { useSQLiteContext } from 'expo-sqlite'
+import { Graph } from 'iconsax-react-native'
+import { ListFilter, Search, X } from 'lucide-react-native'
+import { useMemo, useRef } from 'react'
 import {
   FlatList,
   TouchableNativeFeedback,
@@ -13,65 +16,31 @@ import colors from 'tailwindcss/colors'
 import { CustomerCard } from '@/components/customer-card'
 import { Header } from '@/components/header'
 import { Text } from '@/components/text'
-
-const customers = [
-  {
-    id: '550e8400-e29b-41d4-a716-446655440000',
-    name: 'John Doe',
-    balance: -15075,
-  },
-  {
-    id: '6ba7b810-9dad-11d1-80b4-00c04fd430c8',
-    name: 'Jane Smith',
-    balance: 0,
-  },
-  {
-    id: 'f47ac10b-58cc-4372-a567-0e02b2c3d479',
-    name: 'Alice Johnson',
-    balance: -30050,
-  },
-  {
-    id: 'c9bf9e57-1685-4c89-bafb-ff5af830be8a',
-    name: 'Michael Brown',
-    balance: -7520,
-  },
-  {
-    id: '2a3b4c5d-6e7f-8a9b-0c1d-2e3f4a5b6c7d',
-    name: 'Emily Davis',
-    balance: 0,
-  },
-  {
-    id: '1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed',
-    name: 'David Wilson',
-    balance: -50000,
-  },
-  {
-    id: '123e4567-e89b-12d3-a456-426614174000',
-    name: 'Sarah Martinez',
-    balance: -2530,
-  },
-  {
-    id: 'a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d',
-    name: 'James Anderson',
-    balance: 0,
-  },
-  {
-    id: 'b3c4d5e6-f7a8-9b0c-1d2e-3f4a5b6c7d8e',
-    name: 'Linda Taylor',
-    balance: -12090,
-  },
-  {
-    id: 'd4e5f6a7-b8c9-0d1e-2f3a-4b5c6d7e8f9a',
-    name: 'Robert Thomas',
-    balance: 0,
-  },
-]
+import { getAllCustomers } from '@/functions/get-all-customers'
+import { parseNumberToReal } from '@/lib/utils'
 
 export default function CustomersScreen() {
+  const db = useSQLiteContext()
   const bottomSheetRef = useRef<BottomSheet>(null)
 
   const handleOpenBottomSheet = () => bottomSheetRef.current.expand()
   const handleCloseBottomSheet = () => bottomSheetRef.current.snapToIndex(0)
+
+  const { data } = useQuery({
+    queryKey: ['customers'],
+    queryFn: () => getAllCustomers(db),
+  })
+
+  const { totalPendingPayments } = useMemo(() => {
+    if (data?.customers) {
+      const totalPendingPayments = data.customers.reduce(
+        (acc, curr) => acc + curr.pendingPayment,
+        0
+      )
+      return { totalPendingPayments }
+    }
+    return { totalPendingPayments: 0 }
+  }, [data])
 
   return (
     <View className="flex-1 bg-zinc-800">
@@ -82,7 +51,7 @@ export default function CustomersScreen() {
               <Search color={colors.violet[100]} />
             </Link>
             <TouchableOpacity>
-              <ChartLine color={colors.violet[100]} />
+              <Graph color={colors.violet[100]} />
             </TouchableOpacity>
             <TouchableOpacity onPress={handleOpenBottomSheet}>
               <ListFilter color={colors.violet[100]} />
@@ -91,10 +60,14 @@ export default function CustomersScreen() {
         </Header>
       </View>
       <FlatList
-        data={customers}
+        data={data?.customers}
         keyExtractor={(_, i) => i.toString()}
         renderItem={({ item }) => (
-          <CustomerCard id={item.id} name={item.name} balance={item.balance} />
+          <CustomerCard
+            id={item.id}
+            name={item.name}
+            balance={item.pendingPayment}
+          />
         )}
         initialNumToRender={10}
         windowSize={5}
@@ -104,7 +77,7 @@ export default function CustomersScreen() {
       <View className="flex-row px-5 py-6">
         <Text variant="header">Total Pendente: </Text>
         <Text variant="header" className="text-rose-600">
-          R$ 300,00
+          {parseNumberToReal(totalPendingPayments)}
         </Text>
       </View>
 

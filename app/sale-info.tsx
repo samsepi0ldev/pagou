@@ -93,7 +93,7 @@ export default function SaleInfo() {
       </ScrollView>
       <BottomSheet
         ref={bottomSheetRef}
-        snapPoints={[0.01, '50%']}
+        snapPoints={[0.01, '60%']}
         backgroundStyle={{
           backgroundColor: colors.zinc[700],
         }}

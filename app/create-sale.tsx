@@ -31,11 +31,7 @@ export default function CreateSale() {
   return (
     <View className="flex-1 bg-zinc-800">
       <View className="bg-violet-600">
-        <Header backButton title="Registrar Venda">
-          <TouchableOpacity className="size-8 items-center justify-center">
-            <Check size={24} color={colors.violet[100]} />
-          </TouchableOpacity>
-        </Header>
+        <Header backButton title="Registrar Venda" />
       </View>
       <ScrollView contentContainerClassName="p-4 gap-4">
         {!!customer_id && <Text>{customer_id}</Text>}
@@ -60,6 +56,14 @@ export default function CreateSale() {
             </InputIcon>
             <Input value={date.toLocaleDateString()} readOnly />
           </InputRoot>
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          className="rounded-lg bg-violet-500  px-4 py-4 flex-row gap-2 items-center justify-center"
+        >
+          <Text variant="header" className="leading-0">
+            Salvar
+          </Text>
         </TouchableOpacity>
       </ScrollView>
     </View>

@@ -1,4 +1,4 @@
-import { CircleUserRound, Home, PiggyBank, User2 } from 'lucide-react-native'
+import { Home2, Profile2User, UserSquare, Wallet } from 'iconsax-react-native'
 import { type ReactNode, useEffect } from 'react'
 import { Pressable } from 'react-native'
 import Animated, {
@@ -33,10 +33,10 @@ export function TabBarButton({
   routeName,
 }: TabBarButtonProps) {
   const icon = {
-    index: props => <Home size={24} {...props} />,
-    customers: props => <User2 size={24} {...props} />,
-    sales: props => <PiggyBank size={24} {...props} />,
-    account: props => <CircleUserRound size={24} {...props} />,
+    index: props => <Home2 size={24} {...props} />,
+    customers: props => <Profile2User size={24} {...props} />,
+    sales: props => <Wallet size={24} {...props} />,
+    account: props => <UserSquare size={24} {...props} />,
   }
 
   const scale = useSharedValue(0)

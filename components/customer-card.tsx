@@ -8,7 +8,7 @@ import { router } from 'expo-router'
 import { cn, parseNumberToReal } from '../lib/utils'
 
 interface CustomerCardProps {
-  id: string
+  id: number
   name: string
   balance?: number
 }

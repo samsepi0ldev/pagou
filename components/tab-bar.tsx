@@ -33,7 +33,7 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
   return (
     <View
       onLayout={onTabbarLayout}
-      className="flex-row items-center justify-between py-4 border bg-zinc-950"
+      className="flex-row items-center justify-between py-4 bg-zinc-900 border-t border-zinc-950"
     >
       <Animated.View
         className="absolute bg-violet-500 rounded-full mx-3"

@@ -1,5 +1,5 @@
 import { format } from 'date-fns'
-import { router } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 import { CircleUserRound, Pencil, Trash2 } from 'lucide-react-native'
 import React, { useCallback, useMemo } from 'react'
 import { FlatList, TouchableNativeFeedback, View } from 'react-native'
@@ -8,100 +8,54 @@ import colors from 'tailwindcss/colors'
 import { Header } from '@/components/header'
 import { SalesPaymentInfo } from '@/components/sale-payment-info'
 import { Text } from '@/components/text'
+import { getCustomerByID } from '@/functions/get-customer-by-id'
+import { parseNumberToReal } from '@/lib/utils'
+import { useQuery } from '@tanstack/react-query'
+import { useSQLiteContext } from 'expo-sqlite'
 
-const sales = [
-  {
-    id: 1,
-    description: 'Venda 1',
-    price: 100,
-    created_at: '2023-10-01T10:00:00Z',
-  },
-  {
-    id: 2,
-    description: 'Venda 2',
-    price: 200,
-    created_at: '2023-10-01T12:00:00Z',
-  },
-  {
-    id: 3,
-    description: 'Venda 3',
-    price: 300,
-    created_at: '2023-10-02T09:00:00Z',
-  },
-  {
-    id: 4,
-    description: 'Venda 4',
-    price: 150,
-    created_at: '2023-10-02T14:00:00Z',
-  },
-  {
-    id: 5,
-    description: 'Venda 5',
-    price: 250,
-    created_at: '2023-10-03T11:00:00Z',
-  },
-  {
-    id: 6,
-    description: 'Venda 6',
-    price: 350,
-    created_at: '2023-10-04T16:00:00Z',
-  },
-  {
-    id: 7,
-    description: 'Venda 7',
-    price: 400,
-    created_at: '2023-10-04T18:00:00Z',
-  },
-  {
-    id: 8,
-    description: 'Venda 8',
-    price: 500,
-    created_at: '2023-10-05T10:00:00Z',
-  },
-  {
-    id: 9,
-    description: 'Venda 9',
-    price: 600,
-    created_at: '2023-10-06T12:00:00Z',
-  },
-  {
-    id: 10,
-    description: 'Venda 10',
-    price: 700,
-    created_at: '2023-10-07T09:00:00Z',
-  },
-]
-
-type GroupSalesByDate = Record<string, typeof sales>
+// type GroupSalesByDate = Record<string, typeof sales>
 
 export default function CustomerDetails() {
-  const { data, stickyHeaderIndices } = useMemo(() => {
-    const groupSalesByDate = sales.reduce<GroupSalesByDate>((acc, curr) => {
-      const date = format(new Date(curr.created_at), 'eeee, dd MMMM yyyy')
-      if (!acc[date]) {
-        acc[date] = []
-      }
-      acc[date].push(curr)
-      return acc
-    }, {})
+  const db = useSQLiteContext()
+  const { customer_id } = useLocalSearchParams()
 
-    const data = []
-    for (const date of Object.keys(groupSalesByDate)) {
-      data.push({ type: 'header', date })
-      data.push(
-        ...groupSalesByDate[date].map(sale => ({ type: 'item', ...sale }))
-      )
-    }
+  const { data: customer } = useQuery({
+    queryKey: ['customer', customer_id],
+    queryFn: () => getCustomerByID(db, Number(customer_id)),
+  })
 
-    const stickyHeaderIndices = data
-      .map((item, index) => (item.type === 'header' ? index : null))
-      .filter(index => index !== null)
+  // const { data, stickyHeaderIndices } = useMemo(() => {
+  //   const data = []
+  //   if (customer?.sales) {
+  //     const groupSalesByDate = customer?.sales?.reduce<GroupSalesByDate>(
+  //       (acc, curr) => {
+  //         const date = format(new Date(curr.createdAt), 'eeee, dd MMMM yyyy')
+  //         if (!acc[date]) {
+  //           acc[date] = []
+  //         }
+  //         acc[date].push(curr)
+  //         return acc
+  //       },
+  //       {}
+  //     )
 
-    return {
-      data,
-      stickyHeaderIndices,
-    }
-  }, [])
+  //     for (const date of Object.keys(groupSalesByDate)) {
+  //       data.push({ type: 'header', date })
+  //       data.push(
+  //         ...groupSalesByDate[date].map(sale => ({ type: 'item', ...sale }))
+  //       )
+  //     }
+  //   }
+
+  //   const stickyHeaderIndices = data
+  //     .map((item, index) => (item.type === 'header' ? index : null))
+  //     .filter(index => index !== null)
+
+  //   return {
+  //     data,
+  //     stickyHeaderIndices,
+  //   }
+  // }, [customer])
 
   const renderItem = useCallback(({ item }) => {
     return item.type === 'header' ? (
@@ -116,7 +70,7 @@ export default function CustomerDetails() {
           id: item.id,
           description: item.description,
           price: item.price,
-          totalPayment: 0,
+          pendingPayment: item.pendingPayment,
         }}
       />
     )
@@ -143,7 +97,7 @@ export default function CustomerDetails() {
       <View className="px-4 pt-6 pb-2">
         <View className="flex-row items-center gap-4">
           <CircleUserRound size={48} color={colors.zinc[500]} />
-          <Text variant="title">John Doe</Text>
+          <Text variant="title">{customer?.name}</Text>
         </View>
         <TouchableNativeFeedback
           onPress={() =>
@@ -165,22 +119,27 @@ export default function CustomerDetails() {
       <View className="flex-row items-center justify-between py-4 px-20 border-y border-y-zinc-700">
         <View className="items-center justify-center">
           <Text>Total</Text>
-          <Text className="text-rose-500">R$ 200,00</Text>
+          <Text className="text-rose-500">
+            {parseNumberToReal(customer?.totalSales ?? 0)}
+          </Text>
         </View>
 
         <View className="w-px h-full bg-zinc-700" />
 
         <View className="items-center justify-center">
           <Text>Pendente</Text>
-          <Text className="text-rose-500">R$ 200,00</Text>
+          <Text className="text-rose-500">
+            {' '}
+            {parseNumberToReal(customer?.pendingPayments ?? 0)}
+          </Text>
         </View>
       </View>
       <FlatList
         contentContainerClassName="pt-4 pb-16"
-        data={data}
+        data={customer?.sales}
         renderItem={renderItem}
         keyExtractor={(_, index) => index.toString()}
-        stickyHeaderIndices={stickyHeaderIndices}
+        // stickyHeaderIndices={stickyHeaderIndices}
         initialNumToRender={10}
         windowSize={5}
         showsVerticalScrollIndicator={false}

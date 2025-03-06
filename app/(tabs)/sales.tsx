@@ -1,12 +1,6 @@
 import { eachMonthOfInterval, format } from 'date-fns'
-import {
-  ChartLine,
-  ChevronLeft,
-  ChevronRight,
-  ListFilter,
-  X,
-} from 'lucide-react-native'
-import React, { useCallback, useMemo, useRef, useState } from 'react'
+import { ChevronLeft, ChevronRight, ListFilter, X } from 'lucide-react-native'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { FlatList, TouchableOpacity, View } from 'react-native'
 import Animated, {
   Easing,
@@ -18,78 +12,39 @@ import Animated, {
 import { Header } from '@/components/header'
 import { SalesPaymentInfo } from '@/components/sale-payment-info'
 import { Text } from '@/components/text'
+import * as schema from '@/db/schemas/sale'
+import {
+  type Sale,
+  getAllSales,
+  getSummarySales,
+} from '@/functions/get-all-sales'
+import { parseNumberToReal } from '@/lib/utils'
 import BottomSheet from '@gorhom/bottom-sheet'
 import { BottomSheetView } from '@gorhom/bottom-sheet'
+import { useQuery } from '@tanstack/react-query'
+import { drizzle } from 'drizzle-orm/expo-sqlite'
+import { useSQLiteContext } from 'expo-sqlite'
+import { Graph } from 'iconsax-react-native'
 import colors from 'tailwindcss/colors'
 
-const sales = [
-  {
-    id: 1,
-    description: 'Venda 1',
-    price: 100,
-    created_at: '2023-10-01T10:00:00Z',
-  },
-  {
-    id: 2,
-    description: 'Venda 2',
-    price: 200,
-    created_at: '2023-10-01T12:00:00Z',
-  },
-  {
-    id: 3,
-    description: 'Venda 3',
-    price: 300,
-    created_at: '2023-10-02T09:00:00Z',
-  },
-  {
-    id: 4,
-    description: 'Venda 4',
-    price: 150,
-    created_at: '2023-10-02T14:00:00Z',
-  },
-  {
-    id: 5,
-    description: 'Venda 5',
-    price: 250,
-    created_at: '2023-10-03T11:00:00Z',
-  },
-  {
-    id: 6,
-    description: 'Venda 6',
-    price: 350,
-    created_at: '2023-10-04T16:00:00Z',
-  },
-  {
-    id: 7,
-    description: 'Venda 7',
-    price: 400,
-    created_at: '2023-10-04T18:00:00Z',
-  },
-  {
-    id: 8,
-    description: 'Venda 8',
-    price: 500,
-    created_at: '2023-10-05T10:00:00Z',
-  },
-  {
-    id: 9,
-    description: 'Venda 9',
-    price: 600,
-    created_at: '2023-10-06T12:00:00Z',
-  },
-  {
-    id: 10,
-    description: 'Venda 10',
-    price: 700,
-    created_at: '2023-10-07T09:00:00Z',
-  },
-]
-
-type GroupSalesByDate = Record<string, typeof sales>
+type SaleProps = Sale & { pendingPayment: number }
+type GroupSalesByDate = Record<string, SaleProps[]>
 
 const ANIMATION_DURATION = 100
 
 export default function SalesScreen() {
+  const db = useSQLiteContext()
+
+  const { data } = useQuery({
+    queryKey: ['sales'],
+    queryFn: () => getAllSales(db),
+  })
+
+  const { data: summary } = useQuery({
+    queryKey: ['summary'],
+    queryFn: () => getSummarySales(db),
+  })
+
   const currentYear = new Date().getFullYear()
   const months = useMemo(() => {
     return eachMonthOfInterval({
@@ -162,33 +117,37 @@ export default function SalesScreen() {
     opacity: opacity.value,
   }))
 
-  const { data, stickyHeaderIndices } = useMemo(() => {
-    const groupSalesByDate = sales.reduce<GroupSalesByDate>((acc, curr) => {
-      const date = format(new Date(curr.created_at), 'eeee, dd MMMM yyyy')
-      if (!acc[date]) {
-        acc[date] = []
-      }
-      acc[date].push(curr)
-      return acc
-    }, {})
-
-    const data = []
-    for (const date of Object.keys(groupSalesByDate)) {
-      data.push({ type: 'header', date })
-      data.push(
-        ...groupSalesByDate[date].map(sale => ({ type: 'item', ...sale }))
+  const { sales, stickyHeaderIndices } = useMemo(() => {
+    const sales = []
+    if (data?.sales) {
+      const groupSalesByDate = data?.sales.reduce<GroupSalesByDate>(
+        (acc, curr) => {
+          const date = format(new Date(curr.createdAt), 'eeee, dd MMMM yyyy')
+          if (!acc[date]) {
+            acc[date] = []
+          }
+          acc[date].push(curr)
+          return acc
+        },
+        {}
       )
-    }
 
-    const stickyHeaderIndices = data
+      for (const date of Object.keys(groupSalesByDate)) {
+        sales.push({ type: 'header', date })
+        sales.push(
+          ...groupSalesByDate[date].map(sale => ({ type: 'item', ...sale }))
+        )
+      }
+    }
+    const stickyHeaderIndices = sales
       .map((item, index) => (item.type === 'header' ? index : null))
       .filter(index => index !== null)
 
     return {
-      data,
+      sales,
       stickyHeaderIndices,
     }
-  }, [])
+  }, [data])
 
   const renderItem = useCallback(({ item }) => {
     return item.type === 'header' ? (
@@ -203,7 +162,7 @@ export default function SalesScreen() {
           id: item.id,
           description: item.description,
           price: item.price,
-          totalPayment: 0,
+          pendingPayment: item.pendingPayment,
         }}
       />
     )
@@ -214,7 +173,7 @@ export default function SalesScreen() {
       <View className="bg-violet-600">
         <Header title="Vendas">
           <TouchableOpacity>
-            <ChartLine color={colors.violet[100]} />
+            <Graph color={colors.violet[100]} />
           </TouchableOpacity>
           <TouchableOpacity onPress={handleOpenBottomSheet}>
             <ListFilter color={colors.violet[100]} />
@@ -238,26 +197,32 @@ export default function SalesScreen() {
       <View className="flex-row items-center justify-between py-4 px-20 border-b border-b-zinc-700">
         <View className="items-center justify-center">
           <Text>Total</Text>
-          <Text className="text-rose-500">R$ 200,00</Text>
+          <Text className="text-rose-500">
+            {parseNumberToReal(summary?.totalSales)}
+          </Text>
         </View>
 
         <View className="w-px h-full bg-zinc-700" />
 
         <View className="items-center justify-center">
           <Text>Pendente</Text>
-          <Text className="text-rose-500">R$ 200,00</Text>
+          <Text className="text-rose-500">
+            {parseNumberToReal(summary?.pendingPayment)}
+          </Text>
         </View>
       </View>
-      <FlatList
-        contentContainerClassName="py-4 pb-24"
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={(_, index) => index.toString()}
-        stickyHeaderIndices={stickyHeaderIndices}
-        initialNumToRender={10}
-        windowSize={5}
-        showsVerticalScrollIndicator={false}
-      />
+      {sales.length ? (
+        <FlatList
+          contentContainerClassName="py-4 pb-24"
+          data={sales}
+          renderItem={renderItem}
+          keyExtractor={(_, index) => index.toString()}
+          stickyHeaderIndices={stickyHeaderIndices}
+          initialNumToRender={10}
+          windowSize={5}
+          showsVerticalScrollIndicator={false}
+        />
+      ) : null}
       <BottomSheet
         ref={bottomSheetRef}
         snapPoints={[0.01, 248]}

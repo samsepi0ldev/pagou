@@ -1,17 +1,17 @@
+import { drizzle } from 'drizzle-orm/expo-sqlite'
+import { useDrizzleStudio } from 'expo-drizzle-studio-plugin'
 import { Link, router } from 'expo-router'
+import { useSQLiteContext } from 'expo-sqlite'
 import { CircleMinus, CirclePlus, Cog } from 'lucide-react-native'
-import {
-  ScrollView,
-  TouchableNativeFeedback,
-  TouchableOpacity,
-  View,
-} from 'react-native'
+import { useEffect } from 'react'
+import { ScrollView, TouchableNativeFeedback, View } from 'react-native'
 import colors from 'tailwindcss/colors'
 
 import { Card, CardContent, CardTitle } from '@/components/card'
 import { Header } from '@/components/header'
 import { SalesPaymentInfo } from '@/components/sale-payment-info'
 import { Text } from '@/components/text'
+import * as schema from '@/db/schemas/customer'
 
 const sales = [
   {
@@ -38,6 +38,10 @@ const sales = [
 ]
 
 export default function HomeScreen() {
+  const db = useSQLiteContext()
+  const drizzleDb = drizzle(db, { schema })
+  useDrizzleStudio(db)
+
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}

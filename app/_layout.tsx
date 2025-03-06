@@ -14,6 +14,8 @@ import { SafeAreaView } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import colors from 'tailwindcss/colors'
 
+import { Provider } from './provider'
+
 import '../lib/date-fns'
 import '../global.css'
 
@@ -36,53 +38,58 @@ export default function Layout() {
   if (!fontsLoaded) return
 
   return (
-    <GestureHandlerRootView>
-      <SafeAreaView
-        style={{
-          flex: 1,
-          paddingTop: Constants.statusBarHeight,
-        }}
-        className="bg-zinc-900"
-      >
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="sale-payment-info"
-            options={{ headerShown: false }}
+    <Provider>
+      <GestureHandlerRootView>
+        <SafeAreaView
+          style={{
+            flex: 1,
+            paddingTop: Constants.statusBarHeight,
+          }}
+          className="bg-zinc-900"
+        >
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="sale-payment-info"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="sale-info" options={{ headerShown: false }} />
+            <Stack.Screen name="create-sale" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="create-customer"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="edit-sale" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="edit-customer"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="payments-received"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="contacts" options={{ headerShown: false }} />
+            <Stack.Screen name="settings" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="customer-details"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="customer-search"
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="payments-from-sale"
+              options={{ headerShown: false }}
+            />
+          </Stack>
+          <StatusBar
+            translucent
+            style="light"
+            backgroundColor={colors.violet[500]}
           />
-          <Stack.Screen name="sale-info" options={{ headerShown: false }} />
-          <Stack.Screen name="create-sale" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="create-customer"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen name="edit-sale" options={{ headerShown: false }} />
-          <Stack.Screen name="edit-customer" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="payments-received"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen name="contacts" options={{ headerShown: false }} />
-          <Stack.Screen name="settings" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="customer-details"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="customer-search"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="payments-from-sale"
-            options={{ headerShown: false }}
-          />
-        </Stack>
-        <StatusBar
-          translucent
-          style="light"
-          backgroundColor={colors.violet[500]}
-        />
-      </SafeAreaView>
-    </GestureHandlerRootView>
+        </SafeAreaView>
+      </GestureHandlerRootView>
+    </Provider>
   )
 }
